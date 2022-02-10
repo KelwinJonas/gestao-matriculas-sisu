@@ -37,23 +37,28 @@
             font-size: 18px;
             color: #03284d;
             text-align: center;
+            margin: 0px;
             margin-bottom: 10px;
+            padding: 0px;
         }
 
         .quebrar_pagina {
             page-break-after: always;
         }
 
-        #corpo{
-            float: left;
-            width: 600px;
+        #body{
             position: relative;
-            margin: auto;
+            top: 60px;
         }
         table{
+            margin-top: 10px;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
             border-collapse: collapse;
             width: 100%;
             position: relative;
+            border: solid 1px rgb(126, 126, 126);
+            border-radius: 5px;
         }
         table th {
             font-weight: 100;
@@ -74,13 +79,6 @@
         #footer .page:after{
             content: counter(page);
         }
-        #modalidade {
-            border: solid 1px rgb(126, 126, 126);
-            border-radius: 5px;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-        }
         .esquerda {
             text-align: left;
             float: left;
@@ -93,22 +91,20 @@
         }
 
         .body {
-            position: relative;
-            top: 20px;
         }
 
         .acao_afirmativa {
             text-align: justify;
             margin: 15px;
-            position: relative; 
+            position: relative;
             left: 5px;
         }
     </style>
 
 </head>
 <body>
-    <div id="head">        
-        <img src="{{asset('img/cabecalho_listagem.png')}}" width="100%" alt="">
+    <div id="head">
+        <img src="{{public_path('img/cabecalho_listagem.png')}}" width="100%" alt="">
         <span class="titulo">
             RELAÇÃO DA ETAPA DE ANÁLISE DOCUMENTAL<br>{{$chamada->nome}}<br>
         </span>
@@ -125,10 +121,10 @@
                         @break
                     @case(App\Models\Curso::TURNO_ENUM['noturno'])
                         Noturno
-                        @break 
+                        @break
                     @case(App\Models\Curso::TURNO_ENUM['integral'])
                         Integral
-                        @break 
+                        @break
                     @endswitch
                 </h3>
                 <div class="body">
@@ -195,7 +191,6 @@
                         </table>
                     </div>
                 </div>
-                <br/><div class="quebrar_pagina"></div>
             @endif
         @endforeach
     </div>
