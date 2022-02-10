@@ -40,6 +40,7 @@ class CadastroListaEsperaCandidato implements ShouldQueue
      */
     public function handle()
     {
+        ini_set('auto_detect_line_endings', true);
         $dados = fopen(public_path('storage/'.$this->chamada->sisu->caminho_import_espera), "r");
         $primeira = true;
         $candidatos = collect();
