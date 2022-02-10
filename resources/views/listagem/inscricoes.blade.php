@@ -118,8 +118,7 @@
     <div>
         @foreach ($collect_inscricoes as $i => $collect)
             @if ($collect->count() > 0)
-                @foreach ($collect as $j => $inscricoes)
-                    <h3 class="subtitulo">Curso: {{$inscricoes[0]->curso->nome}} - @switch($inscricoes[0]->curso->turno)
+                <h3 class="subtitulo">Curso: {{$collect->first()->first()->curso->nome}} - @switch($collect->first()->first()->curso->turno)
                     @case(App\Models\Curso::TURNO_ENUM['matutino'])
                         Matutino
                         @break
@@ -132,7 +131,9 @@
                     @case(App\Models\Curso::TURNO_ENUM['integral'])
                         Integral
                         @break 
-                    @endswitch</h3>
+                    @endswitch
+                </h3>
+                @foreach ($collect as $j => $inscricoes)
                     <div class="body">
                         <div id="modalidade">
                             <h4 class="acao_afirmativa">@if($inscricoes[0]->no_modalidade_concorrencia == 'que tenham cursado integralmente o ensino médio em qualquer uma das escolas situadas nas microrregiões do Agreste ou do Sertão de Pernambuco.' ||
@@ -169,14 +170,8 @@
                             </table>
                         </div>
                     </div>
-                    @if ($i != $collect_inscricoes->count() - 1)
-                    <br/><div class="quebrar_pagina"></div>
-                    @else 
-                        @if ($j != $collect->count() - 1)
-                        <br/><div class="quebrar_pagina"></div>
-                        @endif
-                    @endif
                 @endforeach
+                <br/><div class="quebrar_pagina"></div>
             @endif
         @endforeach
     </div>
