@@ -10,7 +10,7 @@
             margin: 120px 50px 80px 50px;
         }
         #head {
-            background-repeat: no-repeat;
+            background-repeat: repeat;
             text-align: center;
             width: 100%;
             position: fixed;
@@ -38,6 +38,7 @@
             color: #03284d;
             text-align: center;
             margin-bottom: 10px;
+            margin-top: 20px;
         }
 
         .quebrar_pagina {
