@@ -386,12 +386,15 @@ class ListagemController extends Controller
 
                             foreach ($candidatosCotaCursoRemanejamento as $candidato) {
                                 if ($cota_curso_quantidade > 0) {
-                                    if (!$cpfs->contains($candidato->candidato->nu_cpf_inscrito)) {
-                                        $candidato->cota_vaga_ocupada_id = $cota->id;
-                                        $candidatosIngressantesCurso->push($candidato);
-                                        $cota_curso_quantidade -= 1;
-                                        $cpfs->push($candidato->candidato->nu_cpf_inscrito);
-                                        Log::info([$candidato->id, $candidato->cota->cod_cota,  $candidato->cotaRemanejada->cod_cota, $cotaRemanejamento->cod_cota]);
+                                    $cota_curso_candidato_quantidade = $curso->cotas()->where('cota_id', $candidato->cota->id)->first()->pivot->quantidade_vagas;
+                                    if ($cota_curso_candidato_quantidade == 0) {
+                                        if (!$cpfs->contains($candidato->candidato->nu_cpf_inscrito)) {
+                                            $candidato->cota_vaga_ocupada_id = $cota->id;
+                                            $candidatosIngressantesCurso->push($candidato);
+                                            $cota_curso_quantidade -= 1;
+                                            $cpfs->push($candidato->candidato->nu_cpf_inscrito);
+                                            Log::info([$candidato->id, $candidato->cota->cod_cota,  $candidato->cotaRemanejada->cod_cota, $cotaRemanejamento->cod_cota]);
+                                        }
                                     }
                                 } else {
                                     $continua = true;
