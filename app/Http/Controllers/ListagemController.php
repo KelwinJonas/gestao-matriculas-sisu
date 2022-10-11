@@ -747,9 +747,7 @@ class ListagemController extends Controller
     private function divirPorSemestre($cotas, $candidatosIngressantesCurso, $primeiroSemestre, $segundoSemestre, $deficiente)
     {
         foreach($cotas as $cota){
-            $porCota = $candidatosIngressantesCurso->where('cota_vaga_ocupada_id', $cota->id)->sortByDesc(function($candidato){
-                return $candidato['nu_nota_candidato'];
-            });
+            $porCota = $candidatosIngressantesCurso->where('cota_vaga_ocupada_id', $cota->id);
             if($deficiente){
                 if($cotas->first()->cod_cota == 'L9'){
                     $primeiroSemestre = $primeiroSemestre->concat($porCota);
