@@ -489,6 +489,10 @@ class ListagemController extends Controller
             $candidatosIngressantesCurso1 = collect();
             $candidatosReservaCurso1 = collect();
 
+            $candidatosIngressantesCurso = $candidatosIngressantesCurso->sortBy(function($candidato){
+                return $candidato->cota_vaga_ocupada_id;
+            });
+            
             if($request->ordenacao == "nome"){
                 $candidatosIngressantesCurso = $candidatosIngressantesCurso->groupBy('cota_vaga_ocupada_id');
                 foreach($candidatosIngressantesCurso as $candidatos){
