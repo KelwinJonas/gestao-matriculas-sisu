@@ -368,17 +368,37 @@ class ListagemController extends Controller
                     }
     
                     if ($cota_curso_quantidade > 0) {
-                        $continua = false;
-                        foreach ($candidatosCurso as $candidato) {
-                            if ($cota_curso_quantidade > 0) {
-                                if (!$cpfs->contains($candidato->candidato->nu_cpf_inscrito) && $candidato->cota->cod_cota != "A0") {
-                                    $candidato->cota_vaga_ocupada_id = $cota->id;
-                                    $candidatosIngressantesCurso->push($candidato);
-                                    $cota_curso_quantidade -= 1;
-                                    $cpfs->push($candidato->candidato->nu_cpf_inscrito);
+                        foreach ($cota->remanejamentos as $remanejamento) {
+                            $cotaRemanejamento = $remanejamento->proximaCota;
+                            $candidatosCotaCursoRemanejamento = Inscricao::where(
+                                [
+                                        ['sisu_id', $sisu->id],
+                                        ['curso_id', $curso->id],
+                                        ['cota_id', $cotaRemanejamento->id],
+                                        ['cd_efetivado', Inscricao::STATUS_VALIDACAO_CANDIDATO['cadastro_validado']]
+                                    ]
+                            )->get();
+        
+                            $candidatosCotaCursoRemanejamento = $candidatosCotaCursoRemanejamento->sortByDesc(function ($candidato) {
+                                return $candidato['nu_nota_candidato'];
+                            });
+        
+                            $continua = false;
+        
+                            foreach ($candidatosCotaCursoRemanejamento as $candidato) {
+                                if ($cota_curso_quantidade > 0) {
+                                    if (!$cpfs->contains($candidato->candidato->nu_cpf_inscrito)) {
+                                        $candidato->cota_vaga_ocupada_id = $cota->id;
+                                        $candidatosIngressantesCurso->push($candidato);
+                                        $cota_curso_quantidade -= 1;
+                                        $cpfs->push($candidato->candidato->nu_cpf_inscrito);
+                                    }
+                                } else {
+                                    $continua = true;
+                                    break;
                                 }
-                            } else {
-                                $continua = true;
+                            }
+                            if ($continua) {
                                 break;
                             }
                         }
