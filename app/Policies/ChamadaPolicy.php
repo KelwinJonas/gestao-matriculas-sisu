@@ -105,10 +105,10 @@ class ChamadaPolicy
         $data_envio = $chamada->datasChamada()->where('tipo', DataChamada::TIPO_ENUM['envio'])->first();
         $data_reenvio = $chamada->datasChamada()->where('tipo', DataChamada::TIPO_ENUM['reenvio'])->first();
 
-        if ($data_envio && date('d/m/Y', strtotime($data_envio->data_inicio)) <= date('d/m/Y', strtotime(now())) && date('d/m/Y', strtotime($data_envio->data_fim)) >= date('d/m/Y', strtotime(now()))) {
-            return true;
-        }else if($data_reenvio && date('d/m/Y', strtotime($data_reenvio->data_inicio)) <= date('d/m/Y', strtotime(now())) && date('d/m/Y', strtotime($data_reenvio->data_fim)) >= date('d/m/Y', strtotime(now()))) {
-            return true;
+        if ($data_envio) {
+            return $this->checarPeriodo($data_envio);
+        }else if($data_reenvio) {
+            return $this->checarPeriodo($data_reenvio);
         }
         return false;
     }
@@ -116,15 +116,24 @@ class ChamadaPolicy
     public function periodoRetificacao(User $user, Chamada $chamada)
     {
         $data_reenvio = $chamada->datasChamada()->where('tipo', DataChamada::TIPO_ENUM['reenvio'])->first();
-        return $data_reenvio && date('d/m/Y', strtotime($data_reenvio->data_inicio)) <= date('d/m/Y', strtotime(now())) && date('d/m/Y', strtotime($data_reenvio->data_fim)) >= date('d/m/Y', strtotime(now()));
+        return $this->checarPeriodo($data_reenvio);
     }
 
     public function periodoEnvio(User $user, Chamada $chamada)
     {
         $data_envio = $chamada->datasChamada()->where('tipo', DataChamada::TIPO_ENUM['envio'])->first();
-        if ($data_envio && date('d/m/Y', strtotime($data_envio->data_inicio)) <= date('d/m/Y', strtotime(now())) && date('d/m/Y', strtotime($data_envio->data_fim)) >= date('d/m/Y', strtotime(now()))){
-            return true;
+        if ($data_envio){
+            return $this->checarPeriodo($data_envio);
         }
         return false;
+    }
+
+    private function checarPeriodo(DataChamada $data)
+    {
+        $dataInicio = new Carbon($data->data_inicio);
+        $dataFim = new Carbon($data->data_fim);
+        $dataHoje = Carbon::now();
+
+        return $dataHoje->between($dataInicio, $dataFim);
     }
 }
