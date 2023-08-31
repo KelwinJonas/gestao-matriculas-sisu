@@ -6,6 +6,7 @@ use App\Models\Chamada;
 use App\Models\User;
 use App\Models\DataChamada;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Support\Carbon;
 
 class ChamadaPolicy
 {
